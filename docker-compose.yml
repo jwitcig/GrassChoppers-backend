@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  queue:
+    build:
+      context: ./services/queue
+      dockerfile: Dockerfile
+    command: node index.js
+    volumes:
+      - .:/services/queue
+    ports:
+      - "4000:4000"

@@ -7,9 +7,9 @@ const queue = createQueue()
 const subscriptionList = createSubscriberList()
 
 const PORT = 4000
-const HOST = '127.0.0.1'
+const HOST = 'localhost'
 
-const startServer = server => server.listen(PORT, HOST)
+const startServer = server => server.listen(PORT)
 
 const onDataReceived = (socket, messageHandler) => data => {
   try {
