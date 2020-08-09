@@ -5,7 +5,8 @@ const createSubscriberList = () => {
     push: (subscriber, topic) => {
       subscriptions.push({
         topic,
-        subscriber
+        subscriber,
+        subscribedAt: Date(),
       })
     },
     getSubscriptions: topic => {

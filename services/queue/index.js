@@ -2,6 +2,7 @@ const net = require('net')
 const createQueue = require('./queue')
 const createSubscriberList = require('./subscribe')
 const { createMessageHandler } = require('./message-handler')
+const { splitPossibleMessages } = require('./utils')
 
 const queue = createQueue()
 const subscriptionList = createSubscriberList()
@@ -11,15 +12,20 @@ const HOST = 'localhost'
 
 const startServer = server => server.listen(PORT)
 
-const onDataReceived = (socket, messageHandler) => data => {
-  try {
-    const message = JSON.parse(data)
-    console.log('received:', message)
+const sendMessage = (recipient, message) => {
+  recipient.write(JSON.stringify(message))
+}
 
-    messageHandler.handleMessage(message, socket)
-  } catch(error) {
-    console.log(error)
-  }
+const onDataReceived = (socket, messageHandler) => data => {
+  splitPossibleMessages(data)
+    .forEach(possibleMessageData => {
+      try {
+        const message = JSON.parse(possibleMessageData)
+        messageHandler.handleMessage(message, sendMessage, socket)
+      } catch(error) {
+        console.log(error, possibleMessageData)
+      }
+    })
 }
 
 const onConnectionClosed = socket => () => {
@@ -30,28 +36,7 @@ const onErrorReceived = error => {
   console.log(error)
 }
 
-const processNextInQueue = (queue, subscriptionList) => {
-  const task = queue.pop()
-  if (!task) {
-    return
-  }
-
-  console.log('executing:', task)
-
-  const message = {
-    id: task.id,
-    topic: task.topic,
-    data: task.data,
-  }
-  subscriptionList
-    .getSubscriptions(task.topic)
-    .forEach(subscription => {
-      const { socket } = subscription.subscriber
-      socket.write(JSON.stringify(message))
-    })
-}
-
-const messageHandler = createMessageHandler(queue, subscriptionList)
+const messageHandler = createMessageHandler(queue, subscriptionList, sendMessage)
 
 const server = net.createServer(socket => {
   socket.setEncoding('utf8')
@@ -62,7 +47,3 @@ const server = net.createServer(socket => {
 })
 
 startServer(server)
-
-setInterval(() => {
-  processNextInQueue(queue, subscriptionList)
-}, 3000);
