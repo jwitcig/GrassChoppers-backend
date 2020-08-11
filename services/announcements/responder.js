@@ -1,6 +1,5 @@
 const responseActionMap = {
-  CREATE_USER: 'USER_CREATED',
-  FIND_USER: 'USER_FOUND',
+  LIST_ANNOUNCEMENTS: 'LISTED_ANNOUNCEMENTS',
 }
 
 module.exports = ({ id, conversation_id, payload: { action } }, responsePayload) => {

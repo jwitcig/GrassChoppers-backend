@@ -10,3 +10,14 @@ services:
       - .:/services/queue
     ports:
       - "4000:4000"
+  announcements:
+    build:
+      context: ./services/announcements
+      dockerfile: Dockerfile
+    command: node index.js
+    volumes:
+      - .:/services/announcements
+    ports:
+      - "4001:4001"
+    depends_on:
+      - queue
