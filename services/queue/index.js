@@ -17,6 +17,7 @@ const sendMessage = (recipient, message) => {
 }
 
 const onDataReceived = (socket, messageHandler) => data => {
+  console.log('received data:', data, splitPossibleMessages(data))
   splitPossibleMessages(data)
     .forEach(possibleMessageData => {
       try {

@@ -29,8 +29,9 @@ const processNextInQueue = (queue, subscriptionList, sendMessage) => {
 
   const message = {
     id: task.id,
+    conversation_id: task.conversation_id,
     topic: task.topic,
-    data: task.data,
+    payload: task.payload,
   }
   subscriptionList
     .getSubscriptions(task.topic)
@@ -52,11 +53,12 @@ const createMessageHandler = (queue, subscriptionList) => {
         const id = generateID()
         queue.push({
           id,
+          conversation_id: message.conversation_id || null,
           topic: message.topic,
-          data: message.data,
+          payload: message.payload,
         })
         reply(sender, ack(message, message.id))
-        console.log(queue.elements)
+        console.log('queue:', queue.elements)
         processNextInQueue(queue, subscriptionList, reply)
       } else if (message.type === 'DEQUEUE') {
         
@@ -64,7 +66,7 @@ const createMessageHandler = (queue, subscriptionList) => {
         subscriptionList.push(sender, message.topic)
 
         reply(sender, ack(message, message.id))
-        console.log(subscriptionList.getSubscriptions())
+        console.log('subscribers:', subscriptionList.getSubscriptions())
       }
     }
   }

@@ -10,6 +10,9 @@ const createSubscriberList = () => {
       })
     },
     getSubscriptions: topic => {
+      if (!topic) {
+        return subscriptions
+      }
       return subscriptions.filter(subscription => subscription.topic === topic)
     },
   }
