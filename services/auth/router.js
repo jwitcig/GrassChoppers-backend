@@ -1,3 +1,4 @@
+const createRouter = require('../../lib/service-components/router')
 const users = require('./users')
 
 const actionFunctionMap = {
@@ -5,13 +6,4 @@ const actionFunctionMap = {
   FIND_USER: users.findUser,
 }
 
-module.exports.route = ({ action, ...args }) => {
-
-  const func = actionFunctionMap[action]
-
-  if (!func) {
-    // unhandled message
-    return null
-  }
-  return func(args)
-}
+module.exports = createRouter(actionFunctionMap)

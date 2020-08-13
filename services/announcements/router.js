@@ -1,16 +1,8 @@
-const users = require('./announcements')
+const createRouter = require('../../lib/service-components/router')
+const announcements = require('./announcements')
 
 const actionFunctionMap = {
-  LIST_ANNOUNCEMENTS: users.listAnnouncements,
+  LIST_ANNOUNCEMENTS: announcements.listAnnouncements,
 }
 
-module.exports.route = ({ action, ...args }) => {
-
-  const func = actionFunctionMap[action]
-
-  if (!func) {
-    // unhandled message
-    return null
-  }
-  return func(args)
-}
+module.exports = createRouter(actionFunctionMap)
