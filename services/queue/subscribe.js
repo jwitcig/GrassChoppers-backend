@@ -16,6 +16,7 @@ const createSubscriberList = () => {
       }
       return subscriptions.filter(subscription => subscription.topic === topic)
     },
+    unsubscribe: subscriber => subscriptions = subscriptions.filter(subscription => subscription.subscriber !== subscriber),
   }
 }
 

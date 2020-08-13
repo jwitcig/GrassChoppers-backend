@@ -29,7 +29,8 @@ const onDataReceived = (socket, messageHandler) => data => {
     })
 }
 
-const onConnectionClosed = socket => () => {
+const onConnectionClosed = (socket, messageHandler) => () => {
+  messageHandler.senderDisconnected(socket)
   console.log('Connection closed')
 }
 
@@ -43,7 +44,7 @@ const server = net.createServer(socket => {
   socket.setEncoding('utf8')
 
   socket.on('error', onErrorReceived)
-  socket.on('close', onConnectionClosed(socket))
+  socket.on('close', onConnectionClosed(socket, messageHandler))
   socket.on('data', onDataReceived(socket, messageHandler))
 })
 

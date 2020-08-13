@@ -21,7 +21,7 @@ const malformed = inboundID => ({
   inbound_id: inboundID || null,
 })
 
-const processNextInQueue = (queue, subscriptionList, sendMessage) => {
+const processNextInQueue = (queue, subscriptionList, sendMessage, sender) => {
   const task = queue.pop()
   if (!task) {
     return
@@ -37,7 +37,7 @@ const processNextInQueue = (queue, subscriptionList, sendMessage) => {
     .getSubscriptions(task.topic)
     .forEach(subscription => {
       const { subscriber, subscriberID } = subscription
-      if (subscriberID !== task.senderID) {
+      if (subscriber !== sender) {
         sendMessage(subscriber, message)
       }
     })
@@ -62,7 +62,7 @@ const createMessageHandler = (queue, subscriptionList) => {
         })
         reply(sender, ack(message, message.id))
         console.log('queue:', queue.elements)
-        processNextInQueue(queue, subscriptionList, reply)
+        processNextInQueue(queue, subscriptionList, reply, sender)
       } else if (message.type === 'DEQUEUE') {
         
       } else if (message.type === 'SUBSCRIBE') {
@@ -71,7 +71,8 @@ const createMessageHandler = (queue, subscriptionList) => {
         reply(sender, ack(message, message.id))
         console.log('subscribers:', subscriptionList.getSubscriptions())
       }
-    }
+    },
+    senderDisconnected: sender => subscriptionList.unsubscribe(sender),
   }
 }
 
