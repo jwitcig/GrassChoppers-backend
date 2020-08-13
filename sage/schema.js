@@ -7,7 +7,14 @@ module.exports = gql`
     subtitle: String
   }
 
+  type Service {
+    service_id: String
+    title: String
+    description: String
+  }
+
   type Query {
     announcements: [Announcement]
+    services: [Service]
   }
 `
