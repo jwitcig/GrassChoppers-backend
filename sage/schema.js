@@ -12,9 +12,16 @@ module.exports = gql`
     title: String
     description: String
   }
+  
+  type UserPreference {
+    preference_id: String
+    preference_key: String
+    state: String
+  }
 
   type Query {
     announcements: [Announcement]
     services: [Service]
+    preference(preference_key: String!): UserPreference
   }
 `
