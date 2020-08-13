@@ -36,8 +36,10 @@ const processNextInQueue = (queue, subscriptionList, sendMessage) => {
   subscriptionList
     .getSubscriptions(task.topic)
     .forEach(subscription => {
-      const { subscriber } = subscription
-      sendMessage(subscriber, message)
+      const { subscriber, subscriberID } = subscription
+      if (subscriberID !== task.senderID) {
+        sendMessage(subscriber, message)
+      }
     })
 }
 
@@ -56,6 +58,7 @@ const createMessageHandler = (queue, subscriptionList) => {
           conversation_id: message.conversation_id || null,
           topic: message.topic,
           payload: message.payload,
+          senderID: message.senderID,
         })
         reply(sender, ack(message, message.id))
         console.log('queue:', queue.elements)
@@ -63,7 +66,7 @@ const createMessageHandler = (queue, subscriptionList) => {
       } else if (message.type === 'DEQUEUE') {
         
       } else if (message.type === 'SUBSCRIBE') {
-        subscriptionList.push(sender, message.topic)
+        subscriptionList.push(sender, message.senderID, message.topic)
 
         reply(sender, ack(message, message.id))
         console.log('subscribers:', subscriptionList.getSubscriptions())

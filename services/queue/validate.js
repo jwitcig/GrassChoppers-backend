@@ -6,7 +6,7 @@ const validateMessage = message => {
   if (message.type === 'ENQUEUE') {
     return isNotUndefined(message.topic) && isNotEmpty(message.payload)
   } else if (message.type === 'SUBSCRIBE') {
-    return isNotUndefined(message.topic)
+    return isNotUndefined(message.topic) && isNotEmpty(message.senderID)
   }
   return false
 }

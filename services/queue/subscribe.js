@@ -2,10 +2,11 @@ const createSubscriberList = () => {
   let subscriptions = []
 
   return {
-    push: (subscriber, topic) => {
+    push: (subscriber, subscriberID, topic) => {
       subscriptions.push({
         topic,
         subscriber,
+        subscriberID,
         subscribedAt: Date(),
       })
     },
