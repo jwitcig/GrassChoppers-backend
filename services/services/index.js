@@ -13,7 +13,7 @@ client.setOnMessageReceived(message => {
   const result = router.route(payload)
   console.log(payload)
 
-  if (!result) {
+  if (result === undefined) {
     console.log('services: unsupported type')
     return
   }

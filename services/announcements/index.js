@@ -11,9 +11,8 @@ client.setOnMessageReceived(message => {
 
   const { payload } = message
   const result = router.route(payload)
-  console.log(payload)
 
-  if (!result) {
+  if (result === undefined) {
     console.log('announcements: unsupported type')
     return
   }

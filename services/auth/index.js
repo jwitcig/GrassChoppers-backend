@@ -12,7 +12,7 @@ client.setOnMessageReceived(message => {
   const { payload } = message
   const result = router.route(payload)
 
-  if (!result) {
+  if (result === undefined) {
     console.log('auth: unsupported type')
     return
   }
