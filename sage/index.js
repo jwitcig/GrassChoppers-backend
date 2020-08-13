@@ -12,7 +12,7 @@ const apolloServer = new ApolloServer({ typeDefs, resolvers: createResolvers(cli
 
 const port = 3000
 const queueSettings = {
-  host: 'localhost',
+  host: 'queue',
   port: 4000,
 }
 

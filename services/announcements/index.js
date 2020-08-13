@@ -25,7 +25,7 @@ client.setOnMessageReceived(message => {
   }
 })
 
-client.connect('localhost', 4000, () => {
+client.connect('queue', 4000, () => {
   client.subscribe({
     topic: null
   })

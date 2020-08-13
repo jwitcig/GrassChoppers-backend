@@ -8,16 +8,59 @@ services:
     command: node index.js
     volumes:
       - .:/services/queue
+  sage:
+    build:
+      context: ./sage
+      dockerfile: Dockerfile
+    command: node index.js
+    volumes:
+      - ./sage:/sage
+      - ./lib/queue-client:/lib/queue-client
     ports:
-      - "4000:4000"
+      - "4000:3000"
+    depends_on:
+      - queue
   announcements:
     build:
       context: ./services/announcements
       dockerfile: Dockerfile
     command: node index.js
     volumes:
-      - .:/services/announcements
-    ports:
-      - "4001:4001"
+      - ./services/announcements:/services/announcements
+      - ./lib/queue-client:/lib/queue-client
+      - ./lib/service-components:/lib/service-components
+    depends_on:
+      - queue
+  auth:
+    build:
+      context: ./services/auth
+      dockerfile: Dockerfile
+    command: node index.js
+    volumes:
+      - ./services/auth:/services/auth
+      - ./lib/queue-client:/lib/queue-client
+      - ./lib/service-components:/lib/service-components
+    depends_on:
+      - queue
+  services:
+    build:
+      context: ./services/services
+      dockerfile: Dockerfile
+    command: node index.js
+    volumes:
+      - ./services/services:/services/services
+      - ./lib/queue-client:/lib/queue-client
+      - ./lib/service-components:/lib/service-components
+    depends_on:
+      - queue
+  user-preferences:
+    build:
+      context: ./services/user-preferences
+      dockerfile: Dockerfile
+    command: node index.js
+    volumes:
+      - ./services/user-preferences:/services/user-preferences
+      - ./lib/queue-client:/lib/queue-client
+      - ./lib/service-components:/lib/service-components
     depends_on:
       - queue
