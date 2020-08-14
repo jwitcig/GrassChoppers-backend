@@ -37,4 +37,19 @@ module.exports = client => ({
       return response.payload.data
     }
   },
+  Mutation: {
+    trackEvent: async (parent, { event_name }, context, info) => {
+      const trackEvent = client.createSagaStep(() => ({
+        type: 'ENQUEUE',
+        payload: {
+          action: 'TRACK_EVENT',
+          event_name,
+          user_id: 'jwitcig',
+        },
+        id: 'asdf',
+      }))
+      const response = await client.waitForSteps(trackEvent)
+      return response.payload.data
+    },
+  },
 })

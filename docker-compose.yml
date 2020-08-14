@@ -31,6 +31,17 @@ services:
       - ./lib/service-components:/lib/service-components
     depends_on:
       - queue
+  analytics:
+    build:
+      context: ./services/analytics
+      dockerfile: Dockerfile
+    command: node index.js
+    volumes:
+      - ./services/analytics:/services/analytics
+      - ./lib/queue-client:/lib/queue-client
+      - ./lib/service-components:/lib/service-components
+    depends_on:
+      - queue
   auth:
     build:
       context: ./services/auth

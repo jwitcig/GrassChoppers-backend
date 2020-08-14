@@ -12,7 +12,7 @@ module.exports = gql`
     title: String
     description: String
   }
-  
+
   type UserPreference {
     preference_id: String
     preference_key: String
@@ -23,5 +23,14 @@ module.exports = gql`
     announcements: [Announcement]
     services: [Service]
     preference(preference_key: String!): UserPreference
+  }
+
+  type TrackedEvent {
+    event_name: String
+    user_id: String
+  }
+
+  type Mutation {
+    trackEvent(event_name: String): TrackedEvent
   }
 `
